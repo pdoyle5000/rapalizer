@@ -168,3 +168,37 @@ func TestLoadingStringIntoWordArray(t *testing.T) {
 		t.Error("Beastie Boys Lyric did not properly load: ", len(rap3.Lyrics), rap3.Lyrics)
 	}
 }
+
+func TestSanitizeString(t *testing.T) {
+	stringWithNewlines := `This\nhas\nnewlines`
+	if SanitizeString(stringWithNewlines) != "This has newlines" {
+		fmt.Println("string: %s", SanitizeString(stringWithNewlines))
+		t.Error("String with newlines incorrectly sanitized.")
+	}
+	stringWithSpecialChars := `*()//\\Redman`
+	if SanitizeString(stringWithSpecialChars) != "Redman" {
+		t.Error("String with special chars incorrectly sanitized.")
+	}
+}
+
+func TestSetArtist(t *testing.T) {
+	var rap Rapalizer
+	rap.SetArtist("Method Man")
+	if rap.Artist != "Method Man" {
+		t.Error("SetArtist incorrectly assigned string to object variable")
+	}
+}
+
+func TestSetTitle(t *testing.T) {
+	var rap Rapalizer
+	rap.SetSongTitle("Method Man")
+	if rap.Title != "Method Man" {
+		t.Error("SetSongTitle incorrectly assigned string to object variable")
+	}
+}
+
+func TestRapalizerToJson(t *testing.T) {
+	var rap Rapalizer
+	rap.LoadStringIntoWordArray("This is a test lyric.")
+
+}

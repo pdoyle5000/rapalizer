@@ -21,13 +21,32 @@ type LyricPairs struct {
 	Second 	string
 }
 //TODO:  ToJson function
+func (rap *Rapalizer) SetArtist(artist string) {
+	rap.Artist = SanitizeString(artist)
+}
 
-func (rap *Rapalizer) LoadStringIntoWordArray(lyrics string) {
-	cleansedString := strings.Replace(lyrics, ")", "", -1)
+func (rap *Rapalizer) SetSongTitle(title string) {
+	rap.Title = SanitizeString(title)
+}
+
+func SanitizeString(input string) string {
+	cleansedString := strings.Replace(input, ")", "", -1)
+	cleansedString = strings.Replace(cleansedString, "(", "", -1)
+	cleansedString = strings.Replace(cleansedString, "/", "", -1)
+	cleansedString = strings.Replace(cleansedString, "*", "", -1)
+	cleansedString = strings.Replace(cleansedString, "//", "", -1)
 	cleansedString = strings.Replace(cleansedString, "(", "", -1)
 	cleansedString = strings.Replace(cleansedString, "\n", " ", -1)
 	cleansedString = strings.Replace(cleansedString, "\r", " ", -1)
-	importedLyrics := strings.Split(cleansedString, " ")
+	cleansedString = strings.Replace(cleansedString, "\\n", " ", -1)
+	cleansedString = strings.Replace(cleansedString, "\\r", " ", -1)
+	cleansedString = strings.Replace(cleansedString, "\\", "", -1)
+	return cleansedString
+}
+
+func (rap *Rapalizer) LoadStringIntoWordArray(lyrics string) {
+	sanitizedString := SanitizeString(lyrics)
+	importedLyrics := strings.Split(sanitizedString, " ")
 	if len(importedLyrics) > 0 {
 		for _, word := range importedLyrics {
 			rap.Lyrics = append(rap.Lyrics, word)
