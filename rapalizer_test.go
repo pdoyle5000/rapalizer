@@ -198,7 +198,13 @@ func TestSetTitle(t *testing.T) {
 }
 
 func TestRapalizerToJson(t *testing.T) {
+	idealString := `{"lyrics":["Fight","for","your","right."],"score":0,"artist":"Beastie Boys","title":"Fight","pairs":null}`
 	var rap Rapalizer
-	rap.LoadStringIntoWordArray("This is a test lyric.")
-
+	rap.LoadStringIntoWordArray("Fight for your right.")
+	rap.SetSongTitle("Fight")
+	rap.SetArtist("Beastie Boys")
+	objJson := rap.ToJson()
+	if objJson != idealString {
+		t.Error("ToJson not properly converting.")
+	}
 }

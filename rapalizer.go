@@ -3,6 +3,7 @@ package rapalizer
 import (
 	"fmt"
 	"strings"
+	"encoding/json"
 )
 
 const NUM_WORDS_TO_FIND_RHYMES int = 20
@@ -20,7 +21,14 @@ type LyricPairs struct {
 	First 	string
 	Second 	string
 }
-//TODO:  ToJson function
+func (rap *Rapalizer) ToJson() string {
+	j, err := json.Marshal(rap)
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	return string(j)
+}
 func (rap *Rapalizer) SetArtist(artist string) {
 	rap.Artist = SanitizeString(artist)
 }
@@ -89,6 +97,8 @@ func (rap *Rapalizer) CompareSuffixes(target string, words []string, skipWords [
 func (rap *Rapalizer) CompareSuffixPair(firstWord string, compareWord string) {
 	firstSuffix := firstWord[len(firstWord)-MIN_CHARS_IN_ELIGIBLE_WORD:]
 	compareSuffix := compareWord[len(compareWord)-MIN_CHARS_IN_ELIGIBLE_WORD:]
+
+	// TODO:  Put special situation logic here. EX: noise/boys does not currently rhyme.
 	if firstSuffix == compareSuffix {
 		if firstWord == compareWord {
 			rap.Score--
